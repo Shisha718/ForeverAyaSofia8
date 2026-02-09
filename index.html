@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,47 +7,51 @@
 
 <style>
 body{
-    text-align:center;
-    font-family:Arial;
-    background:linear-gradient(135deg,#ffe6f0,#ffd6e7);
-    overflow:hidden;
+ text-align:center;
+ font-family:Arial;
+ background:linear-gradient(135deg,#ffe6f0,#ffd6e7);
+ overflow:hidden;
 }
 
-h1,h2,p{
-    color:#d6336c;
-}
+h1,h2,p{color:#d6336c;}
 
 button{
-    padding:12px 25px;
-    font-size:18px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    margin:10px;
+ padding:12px 25px;
+ font-size:18px;
+ border:none;
+ border-radius:12px;
+ cursor:pointer;
+ margin:10px;
 }
 
 #yes{background:#ff4d6d;color:white;}
 #no{background:gray;color:white;position:absolute;}
 
-#gameArea{
-    display:none;
-    height:200px;
-}
-
 .heart{
-    position:fixed;
-    bottom:-20px;
-    font-size:20px;
-    animation:floatUp 6s linear infinite;
+ position:fixed;
+ bottom:-20px;
+ font-size:20px;
+ animation:floatUp 6s linear infinite;
 }
 
 @keyframes floatUp{
-    to{transform:translateY(-110vh);opacity:0;}
+ to{transform:translateY(-110vh);opacity:0;}
 }
 
-#special{
-    display:none;
-    font-size:26px;
+#spoilerText{
+ width:70%;
+ margin:auto;
+ min-height:80px;
+}
+
+#lovePath{
+ display:none;
+}
+
+#pathMessage{
+ font-size:20px;
+ margin-top:20px;
+ min-height:40px;
 }
 </style>
 </head>
@@ -58,9 +63,9 @@ button{
 <div id="main" style="display:none;">
 <h1>Would you be my Valentine? ❤️</h1>
 
-<button onclick="showReasons()">Why you’re special 🌹</button>
+<button onclick="showSpoiler()">Click me for spoiling 👀</button>
 
-<div id="reasons"></div>
+<p id="spoilerText"></p>
 
 <div>
 <button id="yes">Yes 💖</button>
@@ -68,17 +73,15 @@ button{
 </div>
 </div>
 
-<h2 id="finalMsg"></h2>
+<!-- LOVE PATH GAME -->
+<div id="lovePath">
+<h2>Choose our perfect date 🌹</h2>
 
-<div id="gameArea">
-<p>Catch the heart for a bonus surprise 😉</p>
-<button id="catch">❤️</button>
-</div>
+<button onclick="choosePath('movie')">Movie night 🎬</button>
+<button onclick="choosePath('dinner')">Romantic dinner 🍝</button>
+<button onclick="choosePath('walk')">Night walk 🌙</button>
 
-<div id="special">
-💍 You just made me the happiest person.  
-I promise laughs, smiles, and a beautiful date.  
-See you Saturday February 14th at 8 PM ❤️
+<p id="pathMessage"></p>
 </div>
 
 <audio id="music" loop>
@@ -86,39 +89,54 @@ See you Saturday February 14th at 8 PM ❤️
 </audio>
 
 <script>
-const letterText="My dearest Aya Sofia, from the moment you smile, the world feels brighter. I made this little page just for you...";
+
+// Intro letter typing
+const letterText="My dearest Aya Sofia, I made this little page just for you, because you deserve something special...";
 let i=0;
+
 function typeLetter(){
  if(i<letterText.length){
   document.getElementById("letter").innerHTML+=letterText[i];
   i++;
   setTimeout(typeLetter,40);
- }else{
+ } else {
   document.getElementById("main").style.display="block";
  }
 }
 typeLetter();
 
-const reasonsList=[
-"You make ordinary days magical ✨",
-"Your smile is my favorite sight 😊",
-"You’re kind, smart, and beautiful 💖",
-"You make my life brighter 🌸"
-];
 
-function showReasons(){
- let r=document.getElementById("reasons");
- r.innerHTML=reasonsList[Math.floor(Math.random()*reasonsList.length)];
+// Spoiler message
+const spoilerMessage=`You were the most beautiful surprise in my life. From the moment your head rested on my shoulder, something in my heart just knew.
+
+I fell for your smile, your soft lips, your gorgeous hair, and the way your eyes see the world so purely. Even the little things, the way you talk, the way you walk, every tiny expression you make, they stay in my mind.
+
+I love your voice, your laugh, your presence, and every small detail that makes you who you are. Sometimes I wish you could see yourself through my eyes, just to understand how special you are to me.`;
+
+function showSpoiler(){
+ let box=document.getElementById("spoilerText");
+ box.innerHTML="";
+ let j=0;
+
+ function type(){
+  if(j<spoilerMessage.length){
+   box.innerHTML+=spoilerMessage[j++];
+   setTimeout(type,35);
+  }
+ }
+ type();
 }
 
-// escaping NO
+
+// Escaping NO button
 const noBtn=document.getElementById("no");
 noBtn.onmouseover=()=>{
  noBtn.style.left=Math.random()*80+"vw";
  noBtn.style.top=Math.random()*60+"vh";
 };
 
-// floating hearts
+
+// Floating hearts
 setInterval(()=>{
  let h=document.createElement("div");
  h.className="heart";
@@ -126,54 +144,37 @@ setInterval(()=>{
  h.style.left=Math.random()*100+"vw";
  document.body.appendChild(h);
  setTimeout(()=>h.remove(),6000);
-},500);
+},600);
 
-// YES click
+
+// YES click → show Love Path
 document.getElementById("yes").onclick=()=>{
  document.getElementById("music").play();
  document.getElementById("main").style.display="none";
- typeFinal();
+ document.getElementById("lovePath").style.display="block";
 };
 
-function typeFinal(){
- const text="Yay! You said yes 😍";
- let j=0;
- let fm=document.getElementById("finalMsg");
- function t(){
-  if(j<text.length){
-   fm.innerHTML+=text[j++];
-   setTimeout(t,60);
-  }else{
-   startGame();
+
+// Love Path messages
+const pathTexts={
+ movie:"A movie with you means I’ll probably watch your smile more than the screen ❤️",
+ dinner:"Dinner with you sounds perfect, because your presence makes everything sweeter 🌹",
+ walk:"A walk with you under the stars feels like a dream I never want to wake up from ✨"
+};
+
+function choosePath(type){
+ let msg=pathTexts[type];
+ let box=document.getElementById("pathMessage");
+ box.innerHTML="";
+ let k=0;
+
+ function type(){
+  if(k<msg.length){
+   box.innerHTML+=msg[k++];
+   setTimeout(type,40);
   }
  }
- t();
-}
-
-// mini game (FIXED)
-function startGame(){
- const area=document.getElementById("gameArea");
- const catchBtn=document.getElementById("catch");
-
- area.style.display="block";
-
- let moves=0;
-
- catchBtn.style.position="absolute";
-
- catchBtn.onmouseover=()=>{
-  catchBtn.style.left=Math.random()*80+"vw";
-  catchBtn.style.top=Math.random()*60+"vh";
- };
-
- catchBtn.onclick=()=>{
-  moves++;
-
-  if(moves>=3){
-    area.style.display="none";
-    document.getElementById("special").style.display="block";
-  }
- };
+ type();
 }
 
 </script>
