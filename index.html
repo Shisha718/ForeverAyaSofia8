@@ -24,7 +24,11 @@ button{
 }
 
 #yes{background:#ff4d6d;color:white;}
-#no{background:gray;color:white;position:absolute;}
+#no{
+ background:gray;
+ color:white;
+ position:absolute;
+}
 
 .heart{
  position:fixed;
@@ -34,7 +38,10 @@ button{
 }
 
 @keyframes floatUp{
- to{transform:translateY(-110vh);opacity:0;}
+ to{
+  transform:translateY(-110vh);
+  opacity:0;
+ }
 }
 
 #spoilerText{
@@ -50,7 +57,7 @@ button{
 #pathMessage{
  font-size:20px;
  margin-top:20px;
- min-height:40px;
+ min-height:60px;
 }
 </style>
 </head>
@@ -85,8 +92,8 @@ button{
 
 <script>
 
-// Intro typing
-const letterText="My dearest Aya Sofia, I made this page just for you ❤️";
+// 💌 Intro typing letter
+const letterText="My dearest Aya Sofia, I made this page just for you because you deserve something special ❤️";
 let i=0;
 
 function typeLetter(){
@@ -94,15 +101,19 @@ function typeLetter(){
   document.getElementById("letter").innerHTML+=letterText[i];
   i++;
   setTimeout(typeLetter,40);
- }else{
+ } else {
   document.getElementById("main").style.display="block";
  }
 }
 typeLetter();
 
 
-// Spoiler text
-const spoilerMessage="You are the most beautiful surprise in my life. I love your smile, your voice, and every little thing that makes you you.";
+// 👀 Spoiler message
+const spoilerMessage=`You were the most beautiful surprise in my life. From the moment your head rested on my shoulder, something in my heart just knew.
+
+I fell for your smile, your voice, and the way you look at the world. Even the little things — the way you talk, the way you walk, every tiny expression — they stay in my mind.
+
+Sometimes I wish you could see yourself through my eyes, just to know how special you are to me.`;
 
 function showSpoiler(){
  let box=document.getElementById("spoilerText");
@@ -111,7 +122,8 @@ function showSpoiler(){
 
  function type(){
   if(j<spoilerMessage.length){
-   box.innerHTML+=spoilerMessage[j++];
+   box.innerHTML += spoilerMessage[j] === "\n" ? "<br>" : spoilerMessage[j];
+   j++;
    setTimeout(type,35);
   }
  }
@@ -119,7 +131,7 @@ function showSpoiler(){
 }
 
 
-// NO button escape
+// 😈 Escaping NO button
 const noBtn=document.getElementById("no");
 noBtn.onmouseover=()=>{
  noBtn.style.left=Math.random()*80+"vw";
@@ -127,7 +139,7 @@ noBtn.onmouseover=()=>{
 };
 
 
-// Floating hearts
+// ❤️ Floating hearts
 setInterval(()=>{
  let h=document.createElement("div");
  h.className="heart";
@@ -138,30 +150,35 @@ setInterval(()=>{
 },600);
 
 
-// YES click
+// 💖 YES click
 document.getElementById("yes").onclick=function(){
  document.getElementById("main").style.display="none";
  document.getElementById("lovePath").style.display="block";
 };
 
 
-// LOVE PATH LOGIC
+// 🌹 Love Path logic
 const pathTexts={
- movie:"A movie with you means I’ll be watching your smile more than the screen ❤️, see you on Saturday",
- dinner:"Dinner with you sounds perfect because your presence makes everything sweeter 🌹, see you on Saturday",
- walk:"A walk with you under the stars feels like a dream ✨, see you on Saturday"
+ movie:"A movie with you means I’ll be watching your smile more than the screen ❤️",
+ dinner:"Dinner with you sounds perfect because your presence makes everything sweeter 🌹",
+ walk:"A walk with you under the stars feels like a dream ✨"
 };
 
 function choosePath(type){
  let msg=pathTexts[type];
  let box=document.getElementById("pathMessage");
 
+ const ending="\n\nSee you on Saturday at 8 PM ❤️";
+
+ let fullText=msg+ending;
+
  box.innerHTML="";
  let k=0;
 
  function typeText(){
-  if(k<msg.length){
-   box.innerHTML+=msg[k++];
+  if(k<fullText.length){
+   box.innerHTML += fullText[k] === "\n" ? "<br>" : fullText[k];
+   k++;
    setTimeout(typeText,40);
   }
  }
@@ -173,5 +190,6 @@ function choosePath(type){
 
 </body>
 </html>
+
 
 
