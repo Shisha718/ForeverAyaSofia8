@@ -57,7 +57,14 @@ button{
 #pathMessage{
  font-size:20px;
  margin-top:20px;
- min-height:60px;
+ min-height:40px;
+}
+
+#seeYou{
+ font-size:22px;
+ font-weight:bold;
+ color:#ff4d6d;
+ margin-top:10px;
 }
 </style>
 </head>
@@ -85,14 +92,15 @@ button{
 
 <button onclick="choosePath('movie')">Movie night 🎬</button>
 <button onclick="choosePath('dinner')">Romantic dinner 🍝</button>
-<button onclick="choosePath('walk')">Night walk 🌙</button>
+<button onclick="choosePath('sunset')">Sunset watch & drive 🌅🚗</button>
 
 <p id="pathMessage"></p>
+<p id="seeYou"></p>
 </div>
 
 <script>
 
-// 💌 Intro typing letter
+// 💌 Intro typing
 const letterText="My dearest Aya Sofia, I made this page just for you because you deserve something special ❤️";
 let i=0;
 
@@ -108,7 +116,7 @@ function typeLetter(){
 typeLetter();
 
 
-// 👀 Spoiler message
+// 👀 Spoiler text
 const spoilerMessage=`You were the most beautiful surprise in my life. From the moment your head rested on my shoulder, something in my heart just knew.
 
 I fell for your smile, your voice, and the way you look at the world. Even the little things — the way you talk, the way you walk, every tiny expression — they stay in my mind.
@@ -131,7 +139,7 @@ function showSpoiler(){
 }
 
 
-// 😈 Escaping NO button
+// 😈 Escaping NO
 const noBtn=document.getElementById("no");
 noBtn.onmouseover=()=>{
  noBtn.style.left=Math.random()*80+"vw";
@@ -157,29 +165,30 @@ document.getElementById("yes").onclick=function(){
 };
 
 
-// 🌹 Love Path logic
+// 🌹 Love Path captions
 const pathTexts={
  movie:"A movie with you means I’ll be watching your smile more than the screen ❤️",
  dinner:"Dinner with you sounds perfect because your presence makes everything sweeter 🌹",
- walk:"A walk with you under the stars feels like a dream ✨"
+ sunset:"Watching the sunset and driving with you feels magical — just you, me, and a sky full of colors 🌅"
 };
 
 function choosePath(type){
- let msg=pathTexts[type];
- let box=document.getElementById("pathMessage");
 
- const ending="\n\nSee you on Saturday at 8 PM ❤️";
-
- let fullText=msg+ending;
+ let msg = pathTexts[type];
+ let box = document.getElementById("pathMessage");
+ let seeYou = document.getElementById("seeYou");
 
  box.innerHTML="";
+ seeYou.innerHTML="";
+
  let k=0;
 
  function typeText(){
-  if(k<fullText.length){
-   box.innerHTML += fullText[k] === "\n" ? "<br>" : fullText[k];
-   k++;
+  if(k<msg.length){
+   box.innerHTML+=msg[k++];
    setTimeout(typeText,40);
+  } else {
+   seeYou.innerHTML="See you on Saturday ❤️";
   }
  }
 
@@ -190,6 +199,7 @@ function choosePath(type){
 
 </body>
 </html>
+
 
 
 
